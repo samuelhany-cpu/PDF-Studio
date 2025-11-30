@@ -137,14 +137,20 @@ public class LlamaModelManager {
         logger.info("Using llama.cpp at: {}", llamaExe);
         
         // Write prompt to temporary file to handle UTF-8 encoding properly
-        File tempPromptFile = File.createTempFile("llama_prompt_", ".txt");
-        tempPromptFile.deleteOnExit();
-        
-        try (java.io.FileWriter writer = new java.io.FileWriter(tempPromptFile, java.nio.charset.StandardCharsets.UTF_8)) {
-            writer.write(prompt);
+        File tempPromptFile = null;
+        try {
+            tempPromptFile = File.createTempFile("llama_prompt_", ".txt");
+            tempPromptFile.deleteOnExit(); // Backup deletion on JVM exit
+            
+            try (java.io.FileWriter writer = new java.io.FileWriter(tempPromptFile, java.nio.charset.StandardCharsets.UTF_8)) {
+                writer.write(prompt);
+            }
+            
+            logger.debug("Wrote prompt to temp file: {}", tempPromptFile.getAbsolutePath());
+        } catch (java.io.IOException e) {
+            logger.error("Failed to create temporary prompt file: {}", e.getMessage(), e);
+            throw new Exception("Unable to create temp file for prompt: " + e.getMessage(), e);
         }
-        
-        logger.debug("Wrote prompt to temp file: {}", tempPromptFile.getAbsolutePath());
         
         // Build command using --file instead of -p to avoid encoding issues
         List<String> command = new ArrayList<>();
@@ -168,46 +174,56 @@ public class LlamaModelManager {
         
         logger.debug("Running command: {}", String.join(" ", command));
         
-        // Execute llama.cpp
-        ProcessBuilder pb = new ProcessBuilder(command);
-        pb.redirectErrorStream(true);
-        
-        Process process = pb.start();
-        
-        // Read output with UTF-8 encoding
-        StringBuilder output = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(process.getInputStream(), java.nio.charset.StandardCharsets.UTF_8))) {
-            String line;
-            boolean captureOutput = false;
+        String result = null;
+        try {
+            // Execute llama.cpp
+            ProcessBuilder pb = new ProcessBuilder(command);
+            pb.redirectErrorStream(true);
             
-            while ((line = reader.readLine()) != null) {
-                // Skip llama.cpp startup messages
-                if (line.contains("llama_model_load") || line.contains("llm_load_") || 
-                    line.contains("llama_new_context") || line.startsWith("system_info:") ||
-                    line.contains("load_backend") || line.contains("error:")) {
-                    continue;
-                }
+            Process process = pb.start();
+            
+            // Read output with UTF-8 encoding
+            StringBuilder output = new StringBuilder();
+            try (BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(process.getInputStream(), java.nio.charset.StandardCharsets.UTF_8))) {
+                String line;
+                boolean captureOutput = false;
                 
-                // Start capturing after prompt is echoed
-                if (captureOutput || (!line.trim().isEmpty() && !line.startsWith(">"))) {
-                    captureOutput = true;
-                    output.append(line).append("\n");
+                while ((line = reader.readLine()) != null) {
+                    // Skip llama.cpp startup messages
+                    if (line.contains("llama_model_load") || line.contains("llm_load_") || 
+                        line.contains("llama_new_context") || line.startsWith("system_info:") ||
+                        line.contains("load_backend") || line.contains("error:")) {
+                        continue;
+                    }
+                    
+                    // Start capturing after prompt is echoed
+                    if (captureOutput || (!line.trim().isEmpty() && !line.startsWith(">"))) {
+                        captureOutput = true;
+                        output.append(line).append("\n");
+                    }
+                }
+            }
+            
+            // Wait for process to complete
+            int exitCode = process.waitFor();
+            
+            if (exitCode != 0) {
+                logger.warn("llama.cpp exited with code: {}", exitCode);
+            }
+            
+            result = output.toString().trim();
+        } finally {
+            // Always clean up temp file, even if exception occurs
+            if (tempPromptFile != null && tempPromptFile.exists()) {
+                boolean deleted = tempPromptFile.delete();
+                if (!deleted) {
+                    logger.warn("Failed to delete temp file: {}", tempPromptFile.getAbsolutePath());
+                } else {
+                    logger.debug("Cleaned up temp file: {}", tempPromptFile.getAbsolutePath());
                 }
             }
         }
-        
-        // Wait for process to complete
-        int exitCode = process.waitFor();
-        
-        if (exitCode != 0) {
-            logger.warn("llama.cpp exited with code: {}", exitCode);
-        }
-        
-        // Clean up temp file
-        tempPromptFile.delete();
-        
-        String result = output.toString().trim();
         
         // Remove prompt echo if present
         if (result.startsWith(prompt)) {

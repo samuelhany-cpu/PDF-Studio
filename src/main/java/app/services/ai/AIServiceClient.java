@@ -40,28 +40,41 @@ public class AIServiceClient {
     public SummaryResponse summarize(String content, String filename, int maxLength) throws Exception {
         logger.debug("Calling AI microservice for summary: {}", filename);
         
-        // Create request body
-        SummarizeRequest request = new SummarizeRequest(content, filename, maxLength);
-        String requestBody = gson.toJson(request);
-        
-        // Build HTTP request
-        HttpRequest httpRequest = HttpRequest.newBuilder()
-                .uri(URI.create(serviceUrl + "/summarize"))
-                .header("Content-Type", "application/json")
-                .timeout(Duration.ofSeconds(60))
-                .POST(HttpRequest.BodyPublishers.ofString(requestBody))
-                .build();
-        
-        // Send request
-        HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-        
-        if (response.statusCode() == 200) {
-            SummaryResponse summaryResponse = gson.fromJson(response.body(), SummaryResponse.class);
-            logger.info("Summary received from microservice in {}ms (cached: {})", 
-                    summaryResponse.getProcessingTimeMs(), summaryResponse.isCached());
-            return summaryResponse;
-        } else {
-            throw new Exception("AI microservice returned error: " + response.statusCode() + " - " + response.body());
+        try {
+            // Create request body
+            SummarizeRequest request = new SummarizeRequest(content, filename, maxLength);
+            String requestBody = gson.toJson(request);
+            
+            // Build HTTP request
+            HttpRequest httpRequest = HttpRequest.newBuilder()
+                    .uri(URI.create(serviceUrl + "/summarize"))
+                    .header("Content-Type", "application/json")
+                    .timeout(Duration.ofSeconds(60))
+                    .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                    .build();
+            
+            // Send request
+            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+            
+            if (response.statusCode() == 200) {
+                SummaryResponse summaryResponse = gson.fromJson(response.body(), SummaryResponse.class);
+                logger.info("Summary received from microservice in {}ms (cached: {})", 
+                        summaryResponse.getProcessingTimeMs(), summaryResponse.isCached());
+                return summaryResponse;
+            } else {
+                String errorMsg = "AI microservice returned error: " + response.statusCode() + " - " + response.body();
+                logger.error("Microservice error: {}", errorMsg);
+                throw new Exception(errorMsg);
+            }
+        } catch (java.net.http.HttpTimeoutException e) {
+            logger.error("Timeout calling AI microservice for {}: {}", filename, e.getMessage());
+            throw new Exception("AI microservice timeout: " + e.getMessage(), e);
+        } catch (java.net.ConnectException e) {
+            logger.error("Connection failed to AI microservice: {}", e.getMessage());
+            throw new Exception("Cannot connect to AI microservice at " + serviceUrl + ": " + e.getMessage(), e);
+        } catch (Exception e) {
+            logger.error("Error calling AI microservice: {}", e.getMessage(), e);
+            throw new Exception("AI microservice call failed: " + e.getMessage(), e);
         }
     }
     

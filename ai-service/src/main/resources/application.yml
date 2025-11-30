@@ -9,20 +9,8 @@ server:
 spring:
   application:
     name: ai-service
-
-  # Redis Configuration (DISABLED - no Docker required)
-  data:
-    redis:
-      enabled: false
-  
-  cache:
-    type: none  # Disable caching to work without Redis
-  
-  autoconfigure:
-    exclude:
-      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
       
-  # RabbitMQ Configuration (for async processing)
+  # RabbitMQ Configuration (for async processing - optional)
   rabbitmq:
     host: localhost
     port: 5672
@@ -78,7 +66,6 @@ logging:
     root: INFO
     app.aiservice: DEBUG
     org.springframework.web: INFO
-    org.springframework.data.redis: WARN
     org.springframework.amqp: WARN
   pattern:
     console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"

@@ -24,12 +24,13 @@ public class AIServiceImpl implements AIService {
     
     private final PDFService pdfService;
     private final AIServiceClient aiServiceClient;
-    private LlamaModelManager llamaModelManager;
-    private LLMModelManager onnxModelManager;
-    private boolean modelLoaded = false;
-    private boolean useGGUF = false;
-    private boolean useMicroservice = false;
-    private String modelType = "stub";
+    private volatile LlamaModelManager llamaModelManager; // Thread-safe with volatile
+    private volatile LLMModelManager onnxModelManager; // Thread-safe with volatile
+    private volatile boolean modelLoaded = false;
+    private volatile boolean useGGUF = false;
+    private volatile boolean useMicroservice = false;
+    private volatile String modelType = "stub";
+    private final Object inferenceLock = new Object(); // Lock for synchronized inference
 
     public AIServiceImpl() {
         this.pdfService = new PDFServiceImpl();
@@ -266,23 +267,26 @@ public class AIServiceImpl implements AIService {
 
     /**
      * Run inference using ONNX Runtime
+     * Thread-safe with synchronized block to prevent concurrent model access
      */
     private String runInference(String prompt) throws Exception {
         if (!modelLoaded) {
             return "[AI Model not loaded - stub response]";
         }
         
-        try {
-            logger.debug("Running inference with prompt length: {}", prompt.length());
-            
-            // Use appropriate model manager
-            String response;
-            if (useGGUF) {
-                // GGUF model (LLaMA, Phi-3) - supports real text generation
-                response = llamaModelManager.generateText(prompt, 512);
-            } else {
-                // ONNX model (might be BERT) - may produce gibberish
-                response = onnxModelManager.generateText(prompt, 512);
+        // Synchronize access to model managers to prevent concurrent inference
+        synchronized (inferenceLock) {
+            try {
+                logger.debug("Running inference with prompt length: {}", prompt.length());
+                
+                // Use appropriate model manager
+                String response;
+                if (useGGUF) {
+                    // GGUF model (LLaMA, Phi-3) - supports real text generation
+                    response = llamaModelManager.generateText(prompt, 512);
+                } else {
+                    // ONNX model (might be BERT) - may produce gibberish
+                    response = onnxModelManager.generateText(prompt, 512);
                 
                 // Log first 200 characters of response for debugging
                 String preview = response.length() > 200 ? response.substring(0, 200) + "..." : response;
@@ -299,15 +303,16 @@ public class AIServiceImpl implements AIService {
                     logger.warn("Model output appears to be gibberish (BERT is not a generation model), using stub mode");
                     return "[AI Model output not readable - stub response]";
                 }
+                }
+                
+                return response;
+                
+            } catch (Exception e) {
+                logger.error("Inference failed: {}", e.getMessage(), e);
+                // Fallback to stub if inference fails
+                return "[Inference error: " + e.getMessage() + "]";
             }
-            
-            return response;
-            
-        } catch (Exception e) {
-            logger.error("Inference failed: {}", e.getMessage(), e);
-            // Fallback to stub if inference fails
-            return "[Inference error: " + e.getMessage() + "]";
-        }
+        } // End of synchronized block
     }
     
     /**
