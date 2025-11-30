@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="app.controllers.MainController"
+            styleClass="main-window"
+            prefWidth="1600" prefHeight="900">
+
+    <!-- Top: Ribbon Bar -->
+    <top>
+        <VBox>
+            <!-- Menu Bar -->
+            <MenuBar styleClass="menu-bar">
+                <Menu text="File">
+                    <MenuItem text="Open..." fx:id="menuItemOpen" onAction="#handleOpen"/>
+                    <MenuItem text="Save" fx:id="menuItemSave" onAction="#handleSave"/>
+                    <MenuItem text="Save As..." fx:id="menuItemSaveAs" onAction="#handleSaveAs"/>
+                    <SeparatorMenuItem/>
+                    <MenuItem text="Recent Files" fx:id="menuItemRecent"/>
+                    <SeparatorMenuItem/>
+                    <MenuItem text="Exit" fx:id="menuItemExit" onAction="#handleExit"/>
+                </Menu>
+                <Menu text="Edit">
+                    <MenuItem text="Undo" fx:id="menuItemUndo"/>
+                    <MenuItem text="Redo" fx:id="menuItemRedo"/>
+                    <SeparatorMenuItem/>
+                    <MenuItem text="Cut" fx:id="menuItemCut"/>
+                    <MenuItem text="Copy" fx:id="menuItemCopy"/>
+                    <MenuItem text="Paste" fx:id="menuItemPaste"/>
+                </Menu>
+                <Menu text="View">
+                    <CheckMenuItem text="Dark Mode" fx:id="menuItemDarkMode" onAction="#handleToggleTheme"/>
+                    <CheckMenuItem text="Left Sidebar" fx:id="menuItemLeftSidebar" selected="true"/>
+                    <CheckMenuItem text="Right Sidebar" fx:id="menuItemRightSidebar" selected="true"/>
+                    <CheckMenuItem text="Status Bar" fx:id="menuItemStatusBar" selected="true"/>
+                </Menu>
+                <Menu text="Help">
+                    <MenuItem text="Documentation" fx:id="menuItemDocs"/>
+                    <MenuItem text="About" fx:id="menuItemAbout" onAction="#handleAbout"/>
+                </Menu>
+            </MenuBar>
+
+            <!-- Ribbon Tabs -->
+            <HBox styleClass="ribbon-bar" spacing="4">
+                <Button fx:id="ribbonHome" text="Home" styleClass="ribbon-tab" onAction="#handleRibbonHome"/>
+                <Button fx:id="ribbonEdit" text="Edit" styleClass="ribbon-tab" onAction="#handleRibbonEdit"/>
+                <Button fx:id="ribbonConvert" text="Convert" styleClass="ribbon-tab" onAction="#handleRibbonConvert"/>
+                <Button fx:id="ribbonAI" text="AI Assistant" styleClass="ribbon-tab" onAction="#handleRibbonAI"/>
+                <Button fx:id="ribbonView" text="View" styleClass="ribbon-tab" onAction="#handleRibbonView"/>
+                <Button fx:id="ribbonTools" text="Tools" styleClass="ribbon-tab" onAction="#handleRibbonTools"/>
+                <Button fx:id="ribbonSettings" text="Settings" styleClass="ribbon-tab" onAction="#handleRibbonSettings"/>
+            </HBox>
+
+            <!-- Ribbon Content (Dynamic based on selected tab) -->
+            <ToolBar fx:id="ribbonContent" styleClass="tool-bar">
+                <!-- Home Tab Content (Default) -->
+                <Button text="Open" onAction="#handleOpen"/>
+                <Button text="Save" onAction="#handleSave"/>
+                <Separator orientation="VERTICAL"/>
+                <Button text="New" onAction="#handleNew"/>
+                <Button text="Close" onAction="#handleClose"/>
+                <Separator orientation="VERTICAL"/>
+                <Button text="Print" onAction="#handlePrint"/>
+                <Button text="Export" onAction="#handleExport"/>
+            </ToolBar>
+        </VBox>
+    </top>
+
+    <!-- Center: Main Content with Sidebars -->
+    <center>
+        <SplitPane fx:id="mainSplitPane" dividerPositions="0.15, 0.75">
+            <!-- Left Sidebar -->
+            <VBox fx:id="leftSidebar" styleClass="sidebar" spacing="4" minWidth="150">
+                <Label text="Navigation" styleClass="label-subtitle">
+                    <padding><Insets top="8" left="8" bottom="4" right="8"/></padding>
+                </Label>
+                <Button text="Open" styleClass="sidebar-button" onAction="#handleOpen"/>
+                <Button text="Recent" styleClass="sidebar-button" onAction="#handleRecent"/>
+                <Button text="Favorites" styleClass="sidebar-button" onAction="#handleFavorites"/>
+                <Button text="Cloud" styleClass="sidebar-button" onAction="#handleCloud"/>
+                <Separator/>
+                <Button text="Search" styleClass="sidebar-button" onAction="#handleSearch"/>
+            </VBox>
+
+            <!-- Central PDF Viewer Panel -->
+            <StackPane fx:id="pdfViewerPanel" styleClass="pdf-viewer-panel">
+                <Label fx:id="welcomeLabel" text="Open a PDF file to get started" styleClass="label-title"/>
+                <!-- PDF rendering will be added dynamically -->
+                <ScrollPane fx:id="pdfScrollPane" visible="false" fitToWidth="true" fitToHeight="true">
+                    <VBox fx:id="pdfPagesContainer" spacing="10" alignment="CENTER">
+                        <padding><Insets top="20" left="20" bottom="20" right="20"/></padding>
+                    </VBox>
+                </ScrollPane>
+            </StackPane>
+
+            <!-- Right Sidebar with Tabs -->
+            <VBox fx:id="rightSidebar" styleClass="sidebar" minWidth="300">
+                <TabPane fx:id="rightSidebarTabs" tabClosingPolicy="UNAVAILABLE">
+                    <!-- AI Summary Tab -->
+                    <Tab text="AI Summary">
+                        <ScrollPane fitToWidth="true" fitToHeight="true">
+                            <VBox spacing="12">
+                                <padding><Insets top="12" left="12" bottom="12" right="12"/></padding>
+                                <Label text="AI Summary" styleClass="label-subtitle"/>
+                                <Button text="Generate Summary" styleClass="button-primary" 
+                                        onAction="#handleGenerateSummary" maxWidth="Infinity"/>
+                                <Separator/>
+                                <TextArea fx:id="aiSummaryText" editable="false" wrapText="true" 
+                                         promptText="AI-generated summary will appear here..." 
+                                         VBox.vgrow="ALWAYS"/>
+                            </VBox>
+                        </ScrollPane>
+                    </Tab>
+
+                    <!-- AI Chat Tab -->
+                    <Tab text="AI Chat">
+                        <VBox spacing="8">
+                            <padding><Insets top="12" left="12" bottom="12" right="12"/></padding>
+                            <Label text="AI Assistant Chat" styleClass="label-subtitle"/>
+                            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+                                <VBox fx:id="chatMessagesContainer" spacing="8">
+                                    <padding><Insets top="8" left="8" bottom="8" right="8"/></padding>
+                                </VBox>
+                            </ScrollPane>
+                            <HBox spacing="8">
+                                <TextField fx:id="chatInput" promptText="Ask a question about the PDF..." 
+                                          HBox.hgrow="ALWAYS" onAction="#handleSendChatMessage"/>
+                                <Button text="Send" styleClass="button-primary" 
+                                       onAction="#handleSendChatMessage"/>
+                            </HBox>
+                        </VBox>
+                    </Tab>
+
+                    <!-- OCR Tab -->
+                    <Tab text="OCR">
+                        <VBox spacing="12">
+                            <padding><Insets top="12" left="12" bottom="12" right="12"/></padding>
+                            <Label text="Optical Character Recognition" styleClass="label-subtitle"/>
+                            <ComboBox fx:id="ocrLanguageCombo" promptText="Select Language" maxWidth="Infinity"/>
+                            <Button text="Run OCR" styleClass="button-primary" 
+                                   onAction="#handleRunOCR" maxWidth="Infinity"/>
+                            <Separator/>
+                            <Label text="Results:" styleClass="label-secondary"/>
+                            <TextArea fx:id="ocrResultsText" editable="false" wrapText="true" 
+                                     promptText="OCR results will appear here..." 
+                                     VBox.vgrow="ALWAYS"/>
+                            <Label fx:id="ocrConfidenceLabel" text="Confidence: N/A" styleClass="label-secondary"/>
+                        </VBox>
+                    </Tab>
+
+                    <!-- Insights Tab -->
+                    <Tab text="Insights">
+                        <ScrollPane fitToWidth="true" fitToHeight="true">
+                            <VBox spacing="12">
+                                <padding><Insets top="12" left="12" bottom="12" right="12"/></padding>
+                                <Label text="AI-Powered Insights" styleClass="label-subtitle"/>
+                                <Button text="Extract Entities" onAction="#handleExtractEntities" maxWidth="Infinity"/>
+                                <Button text="Find Tables" onAction="#handleFindTables" maxWidth="Infinity"/>
+                                <Button text="Detect Headings" onAction="#handleDetectHeadings" maxWidth="Infinity"/>
+                                <Separator/>
+                                <TextArea fx:id="insightsText" editable="false" wrapText="true" 
+                                         promptText="Insights will appear here..." 
+                                         VBox.vgrow="ALWAYS"/>
+                            </VBox>
+                        </ScrollPane>
+                    </Tab>
+                </TabPane>
+            </VBox>
+        </SplitPane>
+    </center>
+
+    <!-- Bottom: Status Bar -->
+    <bottom>
+        <HBox fx:id="statusBar" styleClass="status-bar" spacing="16" alignment="CENTER_LEFT">
+            <Label fx:id="statusLabel" text="Ready"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="pageInfoLabel" text=""/>
+            <Separator orientation="VERTICAL"/>
+            <Label fx:id="zoomLabel" text="100%"/>
+            <Separator orientation="VERTICAL"/>
+            <ProgressBar fx:id="progressBar" visible="false" prefWidth="150"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

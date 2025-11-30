@@ -1,0 +1,139 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build-main-app:
+    name: Build Main Application
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+        
+    - name: Build with Maven
+      run: mvn clean compile -B
+      
+    - name: Run tests
+      run: mvn test -B
+      
+    - name: Package application
+      run: mvn package -DskipTests -B
+      
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: pdf-studio-jar
+        path: target/*.jar
+        
+  build-ai-service:
+    name: Build AI Microservice
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+        
+    - name: Build AI Service
+      run: |
+        cd ai-service
+        mvn clean compile -B
+        
+    - name: Run AI Service tests
+      run: |
+        cd ai-service
+        mvn test -B
+        
+    - name: Package AI Service
+      run: |
+        cd ai-service
+        mvn package -DskipTests -B
+        
+    - name: Upload AI Service artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ai-service-jar
+        path: ai-service/target/*.jar
+        
+  code-quality:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+        
+    - name: Run spotbugs
+      run: mvn spotbugs:check -B || true
+      
+    - name: Check code style
+      run: mvn checkstyle:check -B || true
+      
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Run dependency check
+      run: mvn dependency-check:check -B || true
+      
+  integration-tests:
+    name: Integration Tests
+    needs: [build-main-app, build-ai-service]
+    runs-on: ubuntu-latest
+    
+    services:
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+          
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+        
+    - name: Run integration tests
+      run: mvn verify -B
+      env:
+        REDIS_HOST: localhost
+        REDIS_PORT: 6379

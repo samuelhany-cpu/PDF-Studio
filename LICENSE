@@ -1,0 +1,103 @@
+PDF Super Studio Pro AI - Software License
+
+Copyright (c) 2025 PDF Studio
+
+IMPORTANT: READ CAREFULLY
+
+This software and associated documentation files (the "Software") are provided 
+for evaluation and demonstration purposes.
+
+DEMONSTRATION LICENSE
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files, to use, copy, and modify
+the Software for personal, educational, or evaluation purposes, subject to the
+following conditions:
+
+1. ATTRIBUTION
+   - The above copyright notice and this permission notice shall be included 
+     in all copies or substantial portions of the Software.
+   - Any modified versions must clearly indicate they are derived from the 
+     original work.
+
+2. RESTRICTIONS
+   - This Software is provided as a demonstration/educational project.
+   - Commercial use requires proper licensing of all included dependencies.
+   - Redistribution of compiled binaries requires compliance with all 
+     third-party licenses.
+
+3. THIRD-PARTY DEPENDENCIES
+   This Software uses the following open-source libraries, each with their 
+   own licenses:
+
+   - JavaFX (GPL v2 with Classpath Exception)
+   - Apache PDFBox (Apache License 2.0)
+   - Tesseract OCR (Apache License 2.0)
+   - ONNX Runtime (MIT License)
+   - SLF4J (MIT License)
+   - Logback (EPL v1.0 / LGPL 2.1)
+   - Gson (Apache License 2.0)
+   - Apache Commons (Apache License 2.0)
+
+   Users must comply with all applicable third-party licenses.
+
+4. AI MODELS
+   - AI model integration requires separate licensing
+   - LLaMA models: Subject to Meta's license agreement
+   - Users must obtain appropriate licenses for any AI models used
+
+5. DISCLAIMER OF WARRANTY
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+   SOFTWARE.
+
+6. LIMITATION OF LIABILITY
+   IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY DIRECT, INDIRECT,
+   INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+   OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+   EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+7. COMMERCIAL USE
+   For commercial use, enterprise deployment, or redistribution:
+   - Contact the copyright holder for licensing options
+   - Ensure compliance with all third-party dependency licenses
+   - Obtain appropriate licenses for any AI models used
+
+8. DATA PRIVACY
+   This Software processes documents locally and does not transmit data to
+   external servers when AI models are configured for offline use. Users are
+   responsible for ensuring compliance with applicable data protection laws.
+
+---
+
+THIRD-PARTY LICENSE SUMMARY
+
+Apache License 2.0 Components:
+- Apache PDFBox
+- Tesseract OCR  
+- Gson
+- Apache Commons
+
+MIT License Components:
+- ONNX Runtime
+- SLF4J
+
+GPL v2 with Classpath Exception:
+- JavaFX (Oracle)
+
+EPL v1.0 / LGPL 2.1:
+- Logback
+
+For full license texts, see respective component repositories.
+
+---
+
+For licensing inquiries or commercial use, contact:
+PDF Studio Development Team

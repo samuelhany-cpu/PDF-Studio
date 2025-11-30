@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <circle cx="256" cy="256" r="240" fill="#003B72"/>
+  
+  <!-- PDF Document Shape -->
+  <g transform="translate(140, 120)">
+    <!-- Main document body -->
+    <rect x="0" y="30" width="180" height="240" rx="3" fill="#FFFFFF"/>
+    
+    <!-- Folded corner -->
+    <path d="M 180 30 L 180 70 L 140 70 Z" fill="#E0E0E0"/>
+    <path d="M 140 70 L 180 70 L 180 30" fill="none" stroke="#CCCCCC" stroke-width="2"/>
+    
+    <!-- Document lines -->
+    <line x1="20" y1="80" x2="160" y2="80" stroke="#003B72" stroke-width="3" opacity="0.3"/>
+    <line x1="20" y1="110" x2="160" y2="110" stroke="#003B72" stroke-width="3" opacity="0.3"/>
+    <line x1="20" y1="140" x2="140" y2="140" stroke="#003B72" stroke-width="3" opacity="0.3"/>
+    <line x1="20" y1="170" x2="160" y2="170" stroke="#003B72" stroke-width="3" opacity="0.3"/>
+    <line x1="20" y1="200" x2="120" y2="200" stroke="#003B72" stroke-width="3" opacity="0.3"/>
+  </g>
+  
+  <!-- AI Chip/Brain Symbol -->
+  <g transform="translate(320, 320)">
+    <!-- Chip body -->
+    <rect x="0" y="0" width="100" height="100" rx="3" fill="#1E1E1E"/>
+    <rect x="10" y="10" width="80" height="80" rx="2" fill="#0078D4"/>
+    
+    <!-- Circuit pattern -->
+    <circle cx="30" cy="30" r="8" fill="#FFFFFF"/>
+    <circle cx="70" cy="30" r="8" fill="#FFFFFF"/>
+    <circle cx="30" cy="70" r="8" fill="#FFFFFF"/>
+    <circle cx="70" cy="70" r="8" fill="#FFFFFF"/>
+    <circle cx="50" cy="50" r="12" fill="#FFFFFF"/>
+    
+    <!-- Connections -->
+    <line x1="30" y1="30" x2="50" y2="50" stroke="#FFFFFF" stroke-width="3"/>
+    <line x1="70" y1="30" x2="50" y2="50" stroke="#FFFFFF" stroke-width="3"/>
+    <line x1="30" y1="70" x2="50" y2="50" stroke="#FFFFFF" stroke-width="3"/>
+    <line x1="70" y1="70" x2="50" y2="50" stroke="#FFFFFF" stroke-width="3"/>
+    
+    <!-- Chip pins -->
+    <rect x="-5" y="20" width="5" height="12" fill="#1E1E1E"/>
+    <rect x="-5" y="68" width="5" height="12" fill="#1E1E1E"/>
+    <rect x="100" y="20" width="5" height="12" fill="#1E1E1E"/>
+    <rect x="100" y="68" width="5" height="12" fill="#1E1E1E"/>
+    <rect x="20" y="-5" width="12" height="5" fill="#1E1E1E"/>
+    <rect x="68" y="-5" width="12" height="5" fill="#1E1E1E"/>
+    <rect x="20" y="100" width="12" height="5" fill="#1E1E1E"/>
+    <rect x="68" y="100" width="12" height="5" fill="#1E1E1E"/>
+  </g>
+  
+  <!-- Border -->
+  <circle cx="256" cy="256" r="240" fill="none" stroke="#FFFFFF" stroke-width="4" opacity="0.2"/>
+</svg>

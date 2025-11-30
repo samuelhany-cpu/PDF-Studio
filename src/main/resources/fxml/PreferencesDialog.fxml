@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<DialogPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            prefWidth="500" prefHeight="400">
+
+    <headerText>Preferences</headerText>
+
+    <content>
+        <VBox spacing="16">
+            <padding><Insets top="16" left="16" bottom="16" right="16"/></padding>
+
+            <!-- General Settings -->
+            <VBox spacing="8">
+                <Label text="General" styleClass="label-subtitle"/>
+                <Separator/>
+                
+                <CheckBox fx:id="autoSaveCheckBox" text="Enable Auto-Save"/>
+                
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <Label text="Auto-Save Interval (minutes):"/>
+                    <TextField fx:id="autoSaveIntervalField" prefWidth="80" text="5"/>
+                </HBox>
+
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <Label text="Default Zoom:"/>
+                    <ComboBox fx:id="defaultZoomCombo" prefWidth="150">
+                        <items>
+                            <javafx.collections.FXCollections fx:factory="observableArrayList">
+                                <String fx:value="50%"/>
+                                <String fx:value="75%"/>
+                                <String fx:value="100%"/>
+                                <String fx:value="125%"/>
+                                <String fx:value="150%"/>
+                                <String fx:value="200%"/>
+                            </javafx.collections.FXCollections>
+                        </items>
+                    </ComboBox>
+                </HBox>
+            </VBox>
+
+            <!-- Appearance Settings -->
+            <VBox spacing="8">
+                <Label text="Appearance" styleClass="label-subtitle"/>
+                <Separator/>
+                
+                <CheckBox fx:id="darkModeCheckBox" text="Dark Mode"/>
+                <CheckBox fx:id="showLeftSidebarCheckBox" text="Show Left Sidebar" selected="true"/>
+                <CheckBox fx:id="showRightSidebarCheckBox" text="Show Right Sidebar" selected="true"/>
+                <CheckBox fx:id="showStatusBarCheckBox" text="Show Status Bar" selected="true"/>
+            </VBox>
+
+            <!-- OCR Settings -->
+            <VBox spacing="8">
+                <Label text="OCR" styleClass="label-subtitle"/>
+                <Separator/>
+                
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <Label text="Default Language:"/>
+                    <ComboBox fx:id="defaultOCRLanguageCombo" prefWidth="150"/>
+                </HBox>
+            </VBox>
+
+            <!-- AI Settings -->
+            <VBox spacing="8">
+                <Label text="AI Model" styleClass="label-subtitle"/>
+                <Separator/>
+                
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <TextField fx:id="aiModelPathField" HBox.hgrow="ALWAYS" 
+                              promptText="Path to ONNX model file..."/>
+                    <Button text="Browse..." onAction="#handleBrowseAIModel"/>
+                </HBox>
+                
+                <Label text="Download LLaMA 3.1 8B GGUF and convert to ONNX format" 
+                       styleClass="label-secondary"/>
+            </VBox>
+        </VBox>
+    </content>
+
+    <buttonTypes>
+        <ButtonType fx:constant="OK"/>
+        <ButtonType fx:constant="CANCEL"/>
+    </buttonTypes>
+
+</DialogPane>

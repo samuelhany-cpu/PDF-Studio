@@ -1,0 +1,397 @@
+/*
+ * PDF Super Studio Pro AI - Dark Theme
+ * Microsoft Fluent Design Style
+ * Maximum border radius: 3px
+ */
+
+/* Root Color Variables */
+.root {
+    /* Background Colors */
+    -fx-background: #1E1E1E;
+    -fx-background-sidebar: #2D2D2D;
+    -fx-background-hover: #3A3A3A;
+    -fx-background-pressed: #505050;
+    
+    /* Accent Colors */
+    -fx-accent: #0078D4;
+    -fx-accent-hover: #106EBE;
+    -fx-accent-pressed: #005A9E;
+    
+    /* Text Colors */
+    -fx-text-base-color: #F0F0F0;
+    -fx-text-secondary: #CCCCCC;
+    -fx-text-disabled: #808080;
+    
+    /* Border Colors */
+    -fx-border-base: #404040;
+    -fx-border-hover: #606060;
+    
+    /* Status Colors */
+    -fx-status-success: #107C10;
+    -fx-status-warning: #FCE100;
+    -fx-status-error: #E81123;
+    -fx-status-info: #0078D4;
+    
+    /* Shadow */
+    -fx-shadow: rgba(0, 0, 0, 0.4);
+    
+    /* Font */
+    -fx-font-family: "Segoe UI Variable", "Segoe UI", "Inter", "Roboto", sans-serif;
+    -fx-font-size: 13px;
+}
+
+/* Main Window */
+.main-window {
+    -fx-background-color: -fx-background;
+}
+
+/* Ribbon Bar */
+.ribbon-bar {
+    -fx-background-color: -fx-background-sidebar;
+    -fx-border-color: -fx-border-base;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 8 12;
+}
+
+.ribbon-tab {
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-text-base-color;
+    -fx-padding: 8 16;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+}
+
+.ribbon-tab:hover {
+    -fx-background-color: -fx-background-hover;
+}
+
+.ribbon-tab:selected {
+    -fx-background-color: -fx-accent;
+    -fx-text-fill: white;
+}
+
+/* Buttons */
+.button {
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-text-base-color;
+    -fx-border-color: -fx-border-base;
+    -fx-border-width: 1;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+    -fx-padding: 6 12;
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: -fx-background-hover;
+    -fx-border-color: -fx-border-hover;
+}
+
+.button:pressed {
+    -fx-background-color: -fx-background-pressed;
+}
+
+.button:disabled {
+    -fx-text-fill: -fx-text-disabled;
+    -fx-opacity: 0.5;
+}
+
+.button-primary {
+    -fx-background-color: -fx-accent;
+    -fx-text-fill: white;
+    -fx-border-color: transparent;
+}
+
+.button-primary:hover {
+    -fx-background-color: -fx-accent-hover;
+}
+
+.button-primary:pressed {
+    -fx-background-color: -fx-accent-pressed;
+}
+
+/* Sidebar */
+.sidebar {
+    -fx-background-color: -fx-background-sidebar;
+    -fx-border-color: -fx-border-base;
+    -fx-padding: 8;
+}
+
+.sidebar-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-text-base-color;
+    -fx-padding: 10 12;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+    -fx-alignment: center-left;
+    -fx-graphic-text-gap: 10;
+}
+
+.sidebar-button:hover {
+    -fx-background-color: -fx-background-hover;
+}
+
+.sidebar-button:selected {
+    -fx-background-color: -fx-accent;
+    -fx-text-fill: white;
+}
+
+/* PDF Viewer Panel */
+.pdf-viewer-panel {
+    -fx-background-color: #2A2A2A;
+    -fx-border-color: -fx-border-base;
+}
+
+/* Text Fields */
+.text-field {
+    -fx-background-color: -fx-background;
+    -fx-text-fill: -fx-text-base-color;
+    -fx-border-color: -fx-border-base;
+    -fx-border-width: 1;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+    -fx-padding: 6 8;
+}
+
+.text-field:focused {
+    -fx-border-color: -fx-accent;
+    -fx-border-width: 2;
+}
+
+/* Labels */
+.label {
+    -fx-text-fill: -fx-text-base-color;
+    -fx-font-size: 13px;
+}
+
+.label-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.label-subtitle {
+    -fx-font-size: 15px;
+    -fx-font-weight: 600;
+}
+
+.label-secondary {
+    -fx-text-fill: -fx-text-secondary;
+    -fx-font-size: 12px;
+}
+
+/* Menu Bar */
+.menu-bar {
+    -fx-background-color: -fx-background-sidebar;
+    -fx-border-color: -fx-border-base;
+    -fx-border-width: 0 0 1 0;
+}
+
+.menu {
+    -fx-text-fill: -fx-text-base-color;
+}
+
+.menu-item {
+    -fx-background-color: -fx-background;
+    -fx-text-fill: -fx-text-base-color;
+}
+
+.menu-item:hover {
+    -fx-background-color: -fx-background-hover;
+}
+
+/* Tab Pane */
+.tab-pane {
+    -fx-background-color: -fx-background;
+    -fx-border-color: -fx-border-base;
+}
+
+.tab {
+    -fx-background-color: -fx-background-sidebar;
+    -fx-text-fill: -fx-text-base-color;
+    -fx-border-radius: 3px 3px 0 0;
+    -fx-background-radius: 3px 3px 0 0;
+}
+
+.tab:selected {
+    -fx-background-color: -fx-background;
+    -fx-border-color: -fx-accent;
+    -fx-border-width: 2 2 0 2;
+}
+
+.tab:hover {
+    -fx-background-color: -fx-background-hover;
+}
+
+/* List View */
+.list-view {
+    -fx-background-color: -fx-background;
+    -fx-border-color: -fx-border-base;
+    -fx-border-width: 1;
+    -fx-border-radius: 3px;
+}
+
+.list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-text-base-color;
+    -fx-padding: 8 12;
+}
+
+.list-cell:hover {
+    -fx-background-color: -fx-background-hover;
+}
+
+.list-cell:selected {
+    -fx-background-color: -fx-accent;
+    -fx-text-fill: white;
+}
+
+/* Scroll Bar */
+.scroll-bar {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #606060;
+    -fx-background-radius: 3px;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: #707070;
+}
+
+.scroll-bar .track {
+    -fx-background-color: transparent;
+}
+
+/* Separator */
+.separator {
+    -fx-background-color: -fx-border-base;
+}
+
+/* Status Bar */
+.status-bar {
+    -fx-background-color: -fx-background-sidebar;
+    -fx-border-color: -fx-border-base;
+    -fx-border-width: 1 0 0 0;
+    -fx-padding: 6 12;
+}
+
+/* Tool Bar */
+.tool-bar {
+    -fx-background-color: -fx-background-sidebar;
+    -fx-border-color: -fx-border-base;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 4 8;
+}
+
+/* Progress Bar */
+.progress-bar {
+    -fx-background-color: -fx-background;
+    -fx-border-color: -fx-border-base;
+    -fx-border-width: 1;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+}
+
+.progress-bar .bar {
+    -fx-background-color: -fx-accent;
+    -fx-background-radius: 3px;
+    -fx-padding: 4;
+}
+
+/* Context Menu */
+.context-menu {
+    -fx-background-color: -fx-background-sidebar;
+    -fx-border-color: -fx-border-base;
+    -fx-border-width: 1;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+    -fx-effect: dropshadow(gaussian, -fx-shadow, 10, 0, 0, 2);
+}
+
+/* Tooltip */
+.tooltip {
+    -fx-background-color: -fx-background-sidebar;
+    -fx-text-fill: -fx-text-base-color;
+    -fx-border-color: -fx-border-base;
+    -fx-border-width: 1;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+    -fx-font-size: 12px;
+    -fx-padding: 4 8;
+}
+
+/* Dialog */
+.dialog-pane {
+    -fx-background-color: -fx-background;
+    -fx-border-color: -fx-border-base;
+    -fx-border-width: 1;
+}
+
+.dialog-pane .header-panel {
+    -fx-background-color: -fx-background-sidebar;
+    -fx-border-color: -fx-border-base;
+    -fx-border-width: 0 0 1 0;
+}
+
+/* Check Box */
+.check-box {
+    -fx-text-fill: -fx-text-base-color;
+}
+
+.check-box .box {
+    -fx-background-color: -fx-background;
+    -fx-border-color: -fx-border-base;
+    -fx-border-width: 1;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+}
+
+.check-box:selected .box {
+    -fx-background-color: -fx-accent;
+    -fx-border-color: -fx-accent;
+}
+
+/* Radio Button */
+.radio-button {
+    -fx-text-fill: -fx-text-base-color;
+}
+
+.radio-button .radio {
+    -fx-background-color: -fx-background;
+    -fx-border-color: -fx-border-base;
+    -fx-border-width: 1;
+}
+
+.radio-button:selected .radio {
+    -fx-background-color: -fx-accent;
+    -fx-border-color: -fx-accent;
+}
+
+/* Combo Box */
+.combo-box {
+    -fx-background-color: -fx-background;
+    -fx-border-color: -fx-border-base;
+    -fx-border-width: 1;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+}
+
+.combo-box:hover {
+    -fx-border-color: -fx-border-hover;
+}
+
+.combo-box .list-cell {
+    -fx-text-fill: -fx-text-base-color;
+}
+
+/* Split Pane */
+.split-pane {
+    -fx-background-color: -fx-background;
+}
+
+.split-pane-divider {
+    -fx-background-color: -fx-border-base;
+    -fx-padding: 0 1 0 1;
+}

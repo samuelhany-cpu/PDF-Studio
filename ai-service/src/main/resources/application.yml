@@ -1,0 +1,87 @@
+# AI Service Configuration
+
+# Server Configuration
+server:
+  port: 8081
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: ai-service
+
+  # Redis Configuration (DISABLED - no Docker required)
+  data:
+    redis:
+      enabled: false
+  
+  cache:
+    type: none  # Disable caching to work without Redis
+  
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+      
+  # RabbitMQ Configuration (for async processing)
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+# Actuator Configuration (health endpoints)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+# AI Model Configuration
+ai:
+  model:
+    # Path to GGUF model (absolute path recommended)
+    path: F:/PDF Studio/models/Llama-3.2-3B-Instruct-Q6_K_L_2.gguf
+    # Maximum tokens for generation
+    max-tokens: 4096
+    # llama.cpp executable locations to search
+    llama-cpp-paths:
+      - F:/PDF Studio/llama.cpp/llama-cli.exe
+      - llama.cpp/llama-cli.exe
+      - ../llama.cpp/llama-cli.exe
+      - llama.cpp/build/bin/Release/llama-cli.exe
+      - C:/llama.cpp/llama-cli.exe
+      - /usr/local/bin/llama-cli
+      - /opt/llama.cpp/llama-cli
+
+  # Cache TTL configurations (in seconds)
+  cache:
+    summary-ttl: 3600      # 1 hour
+    chat-ttl: 1800         # 30 minutes
+    entities-ttl: 7200     # 2 hours
+    translation-ttl: 86400 # 24 hours
+    insights-ttl: 3600     # 1 hour
+
+  # Generation parameters
+  generation:
+    temperature: 0.7
+    top-k: 40
+    top-p: 0.9
+    repeat-penalty: 1.1
+    max-output-tokens: 512
+
+# Logging Configuration
+logging:
+  level:
+    root: INFO
+    app.aiservice: DEBUG
+    org.springframework.web: INFO
+    org.springframework.data.redis: WARN
+    org.springframework.amqp: WARN
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/ai-service.log

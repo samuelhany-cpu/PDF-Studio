@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Placeholder - Generate actual PNG from Logo.svg at 128x128 -->
+<svg width="128" height="128" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="256" cy="256" r="240" fill="#003B72"/>
+  <g transform="translate(140, 120)">
+    <rect x="0" y="30" width="180" height="240" rx="3" fill="#FFFFFF"/>
+  </g>
+  <g transform="translate(320, 320)">
+    <rect x="10" y="10" width="80" height="80" rx="2" fill="#0078D4"/>
+  </g>
+</svg>
