@@ -3,6 +3,11 @@
 # PDF Super Studio Pro AI - Build Script
 # ========================================
 
+# Go to project root (parent of scripts folder)
+cd "$(dirname "$0")/.."
+echo "Running from: $(pwd)"
+echo ""
+
 echo ""
 echo "============================================"
 echo " PDF Super Studio Pro AI - Build Script"

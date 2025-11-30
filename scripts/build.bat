@@ -3,6 +3,10 @@ REM ========================================
 REM PDF Super Studio Pro AI - Build Script
 REM ========================================
 
+REM Go to project root (parent of scripts folder)
+cd /d "%~dp0\.."
+echo Running from: %cd%
+
 echo.
 echo ============================================
 echo  PDF Super Studio Pro AI - Build Script

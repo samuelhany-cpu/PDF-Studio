@@ -6,7 +6,11 @@ echo.
 echo Starting application...
 echo.
 
-cd /d "%~dp0"
+REM Go to project root (parent of scripts folder)
+cd /d "%~dp0\.."
+echo Running from: %cd%
+echo.
+
 call mvn javafx:run
 
 pause

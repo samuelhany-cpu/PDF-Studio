@@ -28,6 +28,7 @@ echo ✓ Services ready
 echo.
 
 echo [4/4] Starting AI Service...
+cd /d "%~dp0\.."
 cd ai-service
 start "AI Service" mvn spring-boot:run
 cd ..
@@ -46,6 +47,7 @@ echo  Check AI Service health:
 echo  curl http://localhost:8081/api/ai/health
 echo.
 echo  To start main app:
+echo  cd .. (if in ai-service)
 echo  mvn javafx:run
 echo.
 pause

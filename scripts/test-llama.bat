@@ -1,7 +1,12 @@
- @echo off
+@echo off
 echo ========================================
 echo  Testing llama.cpp Installation
 echo ========================================
+echo.
+
+REM Go to project root
+cd /d "%~dp0\.."
+echo Checking from: %cd%
 echo.
 
 echo Checking if llama-cli.exe exists...
