@@ -80,21 +80,48 @@ public class AIServiceClient {
     
     /**
      * Check if the AI microservice is available
+     * Retries multiple times with delays to handle startup timing
      */
     public boolean isAvailable() {
-        try {
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(serviceUrl + "/health"))
-                    .timeout(Duration.ofSeconds(5))
-                    .GET()
-                    .build();
+        int maxRetries = 3;
+        int retryDelayMs = 1000; // 1 second between retries
+        
+        for (int attempt = 1; attempt <= maxRetries; attempt++) {
+            try {
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create(serviceUrl + "/health"))
+                        .timeout(Duration.ofSeconds(3))
+                        .GET()
+                        .build();
+                
+                HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+                
+                if (response.statusCode() == 200) {
+                    logger.info("AI microservice is available at {}", serviceUrl);
+                    return true;
+                }
+                
+                logger.debug("Health check attempt {}/{} returned status: {}", attempt, maxRetries, response.statusCode());
+                
+            } catch (java.net.ConnectException e) {
+                logger.debug("Connection attempt {}/{} failed: {}", attempt, maxRetries, e.getMessage());
+            } catch (Exception e) {
+                logger.debug("Health check attempt {}/{} failed: {}", attempt, maxRetries, e.getMessage());
+            }
             
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            return response.statusCode() == 200;
-        } catch (Exception e) {
-            logger.warn("AI microservice not available: {}", e.getMessage());
-            return false;
+            // Wait before retry (except on last attempt)
+            if (attempt < maxRetries) {
+                try {
+                    Thread.sleep(retryDelayMs);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
+            }
         }
+        
+        logger.warn("AI microservice not available after {} attempts at {}", maxRetries, serviceUrl);
+        return false;
     }
     
     /**

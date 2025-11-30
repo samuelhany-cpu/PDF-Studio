@@ -27,14 +27,65 @@ public class OCRServiceImpl implements OCRService {
     public OCRServiceImpl() {
         this.tesseract = new Tesseract();
         this.languageMap = initializeLanguageMap();
+        
+        // Configure Tesseract data path
+        configureTesseractDataPath();
+        
         this.tesseractAvailable = checkTesseractAvailability();
         
         if (tesseractAvailable) {
-            // Set Tesseract data path (adjust based on installation)
-            // tesseract.setDatapath("path/to/tessdata");
             logger.info("Tesseract OCR initialized successfully");
         } else {
             logger.warn("Tesseract OCR not available - stub implementation will be used");
+            logger.warn("To enable OCR:");
+            logger.warn("  1. Install Tesseract: https://github.com/UB-Mannheim/tesseract/wiki");
+            logger.warn("  2. Set TESSDATA_PREFIX environment variable to tessdata folder");
+            logger.warn("  3. Or place tessdata folder in: {}", System.getProperty("user.dir"));
+        }
+    }
+    
+    /**
+     * Configure Tesseract data path from multiple possible locations
+     */
+    private void configureTesseractDataPath() {
+        // Priority order:
+        // 1. TESSDATA_PREFIX environment variable
+        // 2. Common installation paths
+        // 3. Project directory
+        
+        String tessDataPath = System.getenv("TESSDATA_PREFIX");
+        
+        if (tessDataPath != null && !tessDataPath.isEmpty()) {
+            tesseract.setDatapath(tessDataPath);
+            logger.debug("Using Tesseract data path from TESSDATA_PREFIX: {}", tessDataPath);
+            return;
+        }
+        
+        // Try common installation paths
+        String[] possiblePaths = {
+            "C:\\Program Files\\Tesseract-OCR\\tessdata",
+            "C:\\Program Files (x86)\\Tesseract-OCR\\tessdata",
+            "/usr/share/tesseract-ocr/4.00/tessdata",
+            "/usr/share/tesseract-ocr/tessdata",
+            "/usr/local/share/tessdata",
+            "/opt/homebrew/share/tessdata",
+            System.getProperty("user.home") + "/.tessdata",
+            System.getProperty("user.dir") + "/tessdata",
+            "./tessdata"
+        };
+        
+        for (String path : possiblePaths) {
+            java.io.File dir = new java.io.File(path);
+            if (dir.exists() && dir.isDirectory()) {
+                tesseract.setDatapath(path);
+                logger.debug("Found Tesseract data at: {}", path);
+                return;
+            }
+        }
+        
+        logger.warn("Could not find Tesseract data directory. Checked:");
+        for (String path : possiblePaths) {
+            logger.warn("  - {}", path);
         }
     }
 
@@ -145,11 +196,24 @@ public class OCRServiceImpl implements OCRService {
 
     private boolean checkTesseractAvailability() {
         try {
-            // Try to initialize Tesseract
+            // Try to initialize Tesseract with English
             tesseract.setLanguage("eng");
+            
+            // Try a simple test to verify it works
+            // Create a small test image and attempt OCR
+            java.awt.image.BufferedImage testImage = new java.awt.image.BufferedImage(100, 100, java.awt.image.BufferedImage.TYPE_INT_RGB);
+            String testResult = tesseract.doOCR(testImage);
+            
+            logger.debug("Tesseract test successful, result length: {}", testResult != null ? testResult.length() : 0);
             return true;
+        } catch (TesseractException e) {
+            logger.warn("Tesseract OCR test failed: {}", e.getMessage());
+            return false;
+        } catch (UnsatisfiedLinkError e) {
+            logger.warn("Tesseract native library not found: {}", e.getMessage());
+            return false;
         } catch (Exception e) {
-            logger.warn("Tesseract not available: {}", e.getMessage());
+            logger.warn("Tesseract initialization failed: {}", e.getMessage());
             return false;
         }
     }
